@@ -120,15 +120,24 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
-    public function actionPost($id)
+    public function actionPost($id, $sort = 0)
     {
         if (Article::find()->where(['id' => $id, 'status' => 1])->one()) {
             $model = Article::findOne($id);
             $tags = ArticleTag::find()->where(['article_id' => $id])->all();
-            $comments = Comment::find()->where(['article_id' => $id])->all();
+            $commentQuery = Comment::find()->where(['article_id' => $id]);
+            $this->sorting($sort, $commentQuery);
+            $data = $this->getAll($commentQuery);
             $commentForm = new CommentForm();
-            $commentTip = $this->getCommentTip($comments);
-            return $this->render('post', compact('model', 'tags', 'comments', 'commentForm', 'commentTip'));
+            $commentTip = $this->getCommentTip($data['model']);
+            return $this->render('post', [
+                'model' => $model,
+                'tags'  => $tags,
+                'comments'  => $data['model'],
+                'commentForm'  => $commentForm,
+                'commentTip'  => $commentTip,
+                'pages' => $data['pagination'],
+            ]);
         } else {
             return $this->render('error');
         }
@@ -189,7 +198,6 @@ class SiteController extends Controller
 
     public function actionTag($tags)
     {
-//        $data = Article::getAll('', 5, $tags);
         $query = $this->getQuery(0, 0, $tags);
         $data = $this->getAll($query);
         if ($data) {
@@ -253,6 +261,17 @@ class SiteController extends Controller
             ->send();
     }
 
+
+    protected function sorting($sort, $query)
+    {
+        if ($sort) {
+            if ($sort == 'old') {
+                $query->orderBy(['id' => SORT_ASC]);
+            } else {
+                $query->orderBy(['id' => SORT_DESC]);
+            }
+        }
+    }
 
     protected function getAll($query)
     {

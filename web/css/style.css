@@ -34,6 +34,7 @@ ul {
 .search-container {
     margin-bottom: 1em;
 }
+
 .btn-style {
     display: inline-block;
     padding: 6px 12px;
@@ -54,6 +55,19 @@ ul {
     background-image: none;
     border: 1px solid transparent;
     border-radius: 4px;
+}
+
+.sort-btn {
+    display: flex;
+    align-items: flex-start;
+}
+
+.sort-btn .pagination {
+    margin: 0;
+}
+
+.sort-btn .btn {
+    margin-left: 10px;
 }
 /*-------------------
 header

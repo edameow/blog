@@ -3,6 +3,8 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\components\Sidebar;
 use yii\widgets\ActiveForm;
+use yii\widgets\LinkPager;
+
 ?>
 <!--main content start-->
 <div class="main-content">
@@ -51,7 +53,37 @@ use yii\widgets\ActiveForm;
                     </div>
                 </article>
 
+                <!-- end bottom comment-->
+                <?php if (!Yii::$app->user->isGuest) { ?>
+                    <div class="leave-comment">
+                        <?php $form = ActiveForm::begin([
+                            'action'  => ['site/comment', 'id' => $model->id],
+                            'options' => ['class' => 'form-horizontal contact-form comment-form', 'role' => 'form'],
+                        ]) ?>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <?= $form->field($commentForm, 'comment')->textarea(['class' => 'form-control comment-text', 'placeholder' => 'Сообщение..'])?>
+                            </div>
+                        </div>
+                        <?= Html::submitButton('Отправить', ['class' => 'btn send-btn send-comment'])?>
+                        <?php ActiveForm::end() ?>
+                    </div>
+                <?php } else { ?>
+                    <div class="leave-comment">
+                        <p>Чтобы оставлять комментарии, надо авторизироваться.</p>
+                    </div>
+                <?php } ?>
+
                 <?php if (count($comments)) {?>
+                    <div class="sort-btn">
+                        <?php
+                        echo LinkPager::widget([
+                            'pagination' => $pages,
+                        ]);
+                        ?>
+                        <?= Html::a('Сначала новые', ['post', 'id' => $model->id, 'sort' => 'new'], ['class' => 'btn btn-success sort-new']) ?>
+                        <?= Html::a('Сначала старые', ['post', 'id' => $model->id, 'sort' => 'old'], ['class' => 'btn btn-success sort-old']) ?>
+                    </div>
                     <div class="bottom-comment"><!--bottom comment-->
                         <h4><?= count($comments)?> комментари<?= $commentTip?></h4>
                         <?php foreach ($comments as $comment) { ?>
@@ -80,27 +112,8 @@ use yii\widgets\ActiveForm;
                             } ?>
                         <?php } ?>
                     </div>
+
                 <?php }?>
-                <!-- end bottom comment-->
-                <?php if (!Yii::$app->user->isGuest) { ?>
-                    <div class="leave-comment">
-                        <?php $form = ActiveForm::begin([
-                            'action'  => ['site/comment', 'id' => $model->id],
-                            'options' => ['class' => 'form-horizontal contact-form comment-form', 'role' => 'form'],
-                        ]) ?>
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <?= $form->field($commentForm, 'comment')->textarea(['class' => 'form-control comment-text', 'placeholder' => 'Сообщение..'])?>
-                            </div>
-                        </div>
-                        <?= Html::submitButton('Отправить', ['class' => 'btn send-btn send-comment'])?>
-                        <?php ActiveForm::end() ?>
-                    </div>
-                <?php } else { ?>
-                    <div class="leave-comment">
-                        <p>Чтобы оставлять комментарии, надо авторизироваться.</p>
-                    </div>
-                <?php } ?>
 
             </div>
             <?= Sidebar::widget()?>
