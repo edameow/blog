@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use app\components\Sidebar;
 use yii\widgets\ActiveForm;
 use yii\widgets\LinkPager;
+use yii\widgets\Pjax;
 
 ?>
 <!--main content start-->
@@ -74,12 +75,14 @@ use yii\widgets\LinkPager;
                     </div>
                 <?php } ?>
 
+                <?php Pjax::begin();?>
                 <?php if (count($comments)) {?>
                     <div class="sort-btn">
                         <?php
                         echo LinkPager::widget([
                             'pagination' => $pages,
                         ]);
+
                         ?>
                         <?= Html::a('Сначала новые', ['post', 'id' => $model->id, 'sort' => 'new'], ['class' => 'btn btn-success sort-new']) ?>
                         <?= Html::a('Сначала старые', ['post', 'id' => $model->id, 'sort' => 'old'], ['class' => 'btn btn-success sort-old']) ?>
@@ -114,6 +117,7 @@ use yii\widgets\LinkPager;
                     </div>
 
                 <?php }?>
+                <?php Pjax::end();?>
 
             </div>
             <?= Sidebar::widget()?>

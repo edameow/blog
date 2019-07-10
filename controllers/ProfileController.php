@@ -99,10 +99,37 @@ class ProfileController extends Controller
     public function actionDraft()
     {
         if (!Yii::$app->user->isGuest && Yii::$app->user->identity->contentmaker) {
+            $this->ajaxAction();
             $user_id = Yii::$app->user->id;
             $model = $this->findDraft($user_id);
             return $this->render('draft', compact('model'));
         } else return $this->render('error');
+    }
+
+    private function ajaxAction()
+    {
+        if (Yii::$app->request->isAjax) {
+            $id = Yii::$app->request->get('id');
+            $action = Yii::$app->request->get('action');
+            $this->ajaxOfferAction($id, $action);
+            $this->ajaxDeleteAction($id, $action);
+            echo ' ';
+            die();
+        }
+    }
+
+    private function ajaxOfferAction($id, $action)
+    {
+        if ($action == 'offer') {
+            $this->offerArticle($id);
+        }
+    }
+
+    private function ajaxDeleteAction($id, $action)
+    {
+        if ($action == 'delete') {
+            $this->deleteArticle($id);
+        }
     }
 
     public function actionArticle($id)
@@ -143,18 +170,15 @@ class ProfileController extends Controller
 //        return $this->render('image', compact('model'));
 //    }
 
-    public function actionOffer($id)
+    private function offerArticle($id)
     {
         if (!Yii::$app->user->isGuest && Yii::$app->user->identity->contentmaker) {
             $model = $this->findArticle($id);
-
-            if ($model->saveArticle()) {
-                return $this->redirect(['draft']);
-            }
+            $model->saveArticle();
         } else return $this->render('error');
     }
 
-    public function actionDelete($id)
+    private function deleteArticle($id)
     {
         if (!Yii::$app->user->isGuest && Yii::$app->user->identity->contentmaker) {
             $tags = $this->getTagsId($id);
@@ -200,13 +224,15 @@ class ProfileController extends Controller
 
     protected function checkUselessTags($tags)
     {
-        $same_tags = $this->getSameTags($tags);
+        if ($tags) {
+            $same_tags = $this->getSameTags($tags);
             if ($same_tags) {
                 $same_tags = $this->getReadableArray($same_tags);
                 if (count($tags) != count($same_tags)) {
                     $this->deleteUselessTags($tags, $same_tags);
                 }
             } else $this->deleteUselessTags($tags, $same_tags);
+        }
     }
 
     protected function getSameTags($tags)

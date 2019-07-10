@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 
 $this->title = 'Черновик';
 $this->params['breadcrumbs'][] = ['label' => 'Articles', 'url' => ['index']];
@@ -10,6 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <h1 class="h1-to-h3"><?= Html::encode($this->title) ?></h1>
         <ul class="list-unstyled draft-list">
             <?php foreach ($model as $item) { ?>
+                <?php Pjax::begin(['enablePushState' => false]);?>
                 <li>
                     <article class="post post-list">
                         <div class="row">
@@ -50,20 +52,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                         </div>
                                         <div class="btn-continue-reading text-uppercase" style="margin-bottom: 1em">
                                             <?= Html::a('Редактировать', Url::to(['profile/article', 'id' => $item['id']]), ['class' => 'btn btn-success'])?>
-                                            <?= Html::a('Предложить', ['offer', 'id' => $item['id']], ['class' => 'btn btn-primary']) ?>
-                                            <?= Html::a('Удалить', ['delete', 'id' => $item['id']], [
-                                                    'class' => 'btn btn-danger',
-                                                    'data' => [
-                                                        'confirm' => 'Are you sure you want to delete this item?',
-                                                        'method' => 'post',
-                                                        ],
-                                            ]) ?>
+                                            <?= Html::a('Предложить', ['draft', 'id' => $item['id'], 'action' => 'offer'], ['class' => 'btn btn-primary']) ?>
+                                            <?= Html::a('Удалить', ['draft', 'id' => $item['id'], 'action' => 'delete'], ['class' => 'btn btn-danger']) ?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                     </article>
                 </li>
+                <?php Pjax::end();?>
             <?php }?>
         </ul>
 </div>
