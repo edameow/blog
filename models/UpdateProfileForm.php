@@ -64,12 +64,12 @@ class UpdateProfileForm extends Model
         }
     }
 
-    protected function validatePassword($user, $password)
+    private function validatePassword($user, $password)
     {
         return Yii::$app->security->validatePassword($password, $user->password);
     }
 
-    protected function getUser()
+    private function getUser()
     {
         $user_id = Yii::$app->user->identity->getId();
         return User::find()->where(['id' => $user_id])->one();

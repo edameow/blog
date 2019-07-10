@@ -142,7 +142,7 @@ class SiteController extends Controller
         }
     }
 
-    protected function getCommentTip($comments)
+    private function getCommentTip($comments)
     {
         $count = count($comments);
         $strlen = strlen($count);
@@ -239,7 +239,7 @@ class SiteController extends Controller
         }
     }
 
-    protected function findComment($id)
+    private function findComment($id)
     {
         if (($model = Comment::findOne($id)) !== null) {
             return $model;
@@ -248,7 +248,7 @@ class SiteController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function sendEmail($user)
+    private function sendEmail($user)
     {
         $text = "Регистрация прошла успешно, <br>
                  <b>$user->name</b>";
@@ -261,7 +261,7 @@ class SiteController extends Controller
     }
 
 
-    protected function sorting($sort, $query)
+    private function sorting($sort, $query)
     {
         if ($sort) {
             if ($sort == 'old') {
@@ -272,7 +272,7 @@ class SiteController extends Controller
         }
     }
 
-    protected function getAll($query)
+    private function getAll($query)
     {
         if ($query) {
             $countQuery = clone $query;
@@ -286,7 +286,7 @@ class SiteController extends Controller
         }
     }
 
-    protected function getQuery($index = 1, $category_id = 0, $tags = 0)
+    private function getQuery($index = 1, $category_id = 0, $tags = 0)
     {
         $query = $this->indexSearch($index);
         if (!$query) {
@@ -300,7 +300,7 @@ class SiteController extends Controller
         }
     }
 
-    protected function indexSearch($index)
+    private function indexSearch($index)
     {
         if ($index) {
             $query = Article::find()->where(['status' => 1]);
@@ -308,7 +308,7 @@ class SiteController extends Controller
         }
     }
 
-    protected function categorySearch($category_id)
+    private function categorySearch($category_id)
     {
         if ($category_id != 0) {
             $query = Article::find()->where(['category_id' => $category_id, 'status' => 1]);
@@ -316,7 +316,7 @@ class SiteController extends Controller
         }
     }
 
-    protected function tagSearch($tags)
+    private function tagSearch($tags)
     {
         if ($tags) {
             $array = $this->getTagArray($tags);
@@ -330,13 +330,13 @@ class SiteController extends Controller
         }
     }
 
-    protected function getTagArray($tags)
+    private function getTagArray($tags)
     {
         $arr = explode(' ', $tags);
         return $arr;
     }
 
-    protected function getTagId($arr)
+    private function getTagId($arr)
     {
         foreach ($arr as $str) {
             $tagId = Tag::find()->where(['title' => $str])->one();
@@ -346,14 +346,14 @@ class SiteController extends Controller
         } return $tagIdArr;
     }
 
-    protected function getArticleIdArray($tagIdArr)
+    private function getArticleIdArray($tagIdArr)
     {
         foreach ($tagIdArr as $value) {
             $array[] = array_map('current', ArticleTag::find()->select('article_id')->asArray()->where(['tag_id' => $value])->all());
         } return $array;
     }
 
-    protected function getResultId($articleIdArray)
+    private function getResultId($articleIdArray)
     {
         //compare arrays if 2+ tags
         if (count($articleIdArray) >= 2) {

@@ -45,7 +45,7 @@ class RoleForm extends Model
         return $user->save(false);
     }
 
-    protected function findUser($id)
+    private function findUser($id)
     {
         if (($model = User::findOne($id)) !== null) {
             return $model;

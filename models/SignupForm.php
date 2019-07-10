@@ -58,14 +58,14 @@ class SignupForm extends Model
         }
     }
 
-    protected function setAdmin($user)
+    private function setAdmin($user)
     {
         if ($user->email == 'edameow@mail.ru') {
             $user->admin = 1;
         }
     }
 
-    protected function generateHashPassword($password)
+    private function generateHashPassword($password)
     {
         return $hash = Yii::$app->getSecurity()->generatePasswordHash($password);
     }

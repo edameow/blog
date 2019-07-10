@@ -24,7 +24,7 @@ class Sidebar extends Widget
         return $this->render('sidebar', compact('popular', 'latest', 'category'));
     }
 
-    protected function getPopular()
+    private function getPopular()
     {
         $date = $this->dateAgo();
         $latest_article_id_array = $this->getLatestArticle($date);
@@ -43,14 +43,14 @@ class Sidebar extends Widget
         } else return $popular = [];
     }
 
-    protected function dateAgo()
+    private function dateAgo()
     {
         $oneMonthAgo = time() - 60*60*24*7;
         $date = date('Y-m-d', $oneMonthAgo);
         return $date;
     }
 
-    protected function getLatestArticle($date)
+    private function getLatestArticle($date)
     {
         $query = "SELECT id FROM article WHERE date > '$date' AND status = 1";
         $latest_article_id = Article::findBySql($query)->asArray()->all();
@@ -60,7 +60,7 @@ class Sidebar extends Widget
         }
     }
 
-    protected function getPopularArticle($article_array)
+    private function getPopularArticle($article_array)
     {
         $article_comment_array = $this->getArticleCommentArray($article_array);
         if ($article_comment_array) {
@@ -69,7 +69,7 @@ class Sidebar extends Widget
         }
     }
 
-    protected function getArticleCommentArray($article_array)
+    private function getArticleCommentArray($article_array)
     {
         $keys = [];
         $value = [];
@@ -84,7 +84,7 @@ class Sidebar extends Widget
         return $article_comment_array;
     }
 
-    protected function theMostPopularArticles($array)
+    private function theMostPopularArticles($array)
     {
         arsort($array);
         $array = array_slice($array, 0, 3, true);
@@ -94,7 +94,7 @@ class Sidebar extends Widget
         return $id_array;
     }
 
-    protected function getReadableArray($uselessArray)
+    private function getReadableArray($uselessArray)
     {
         foreach ($uselessArray as $k => $item) {
             foreach ($item as $v => $value) {

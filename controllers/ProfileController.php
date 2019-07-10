@@ -189,7 +189,7 @@ class ProfileController extends Controller
         } else return $this->render('error');
     }
 
-    protected function setImage($imageModel, $model, $folder)
+    private function setImage($imageModel, $model, $folder)
     {
         $file = UploadedFile::getInstance($imageModel, 'image');
         if ($file) {
@@ -197,7 +197,7 @@ class ProfileController extends Controller
         }
     }
 
-    protected function getTagsId($id)
+    private function getTagsId($id)
     {
         $tags = $this->getTags($id);
         if ($tags) {
@@ -206,13 +206,13 @@ class ProfileController extends Controller
         }
     }
 
-    protected function getTags($id)
+    private function getTags($id)
     {
         $tags = ArticleTag::find()->asArray()->select('tag_id')->where(['article_id' => $id])->all();
         return $tags;
     }
 
-    protected function getReadableArray($tags_array)
+    private function getReadableArray($tags_array)
     {
         foreach ($tags_array as $k => $item) {
             foreach ($item as $v => $value) {
@@ -222,7 +222,7 @@ class ProfileController extends Controller
         return $array;
     }
 
-    protected function checkUselessTags($tags)
+    private function checkUselessTags($tags)
     {
         if ($tags) {
             $same_tags = $this->getSameTags($tags);
@@ -235,19 +235,19 @@ class ProfileController extends Controller
         }
     }
 
-    protected function getSameTags($tags)
+    private function getSameTags($tags)
     {
         $same_tags = ArticleTag::find()->asArray()->select(['tag_id'])->distinct()->where(['tag_id' => $tags])->all();
         return $same_tags;
     }
 
-    protected function deleteUselessTags($tags, $same_tags)
+    private function deleteUselessTags($tags, $same_tags)
     {
         $uselessTags = array_diff($tags, $same_tags);
         Tag::deleteAll(['id' => $uselessTags]);
     }
 
-    protected function findModel($id)
+    private function findModel($id)
     {
         if (($model = User::findOne($id)) !== null) {
             return $model;
@@ -256,7 +256,7 @@ class ProfileController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findDraft($user_id)
+    private function findDraft($user_id)
     {
         if (($model = Article::find()->where(['status' => 2, 'user_id' => $user_id])->all()) !== null) {
             return $model;
@@ -265,7 +265,7 @@ class ProfileController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findArticle($id)
+    private function findArticle($id)
     {
         if (($model = Article::findOne($id)) !== null) {
             return $model;
@@ -274,12 +274,12 @@ class ProfileController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function createCategoryArr()
+    private function createCategoryArr()
     {
         return ArrayHelper::map(Category::find()->all(), 'id', 'title');
     }
 
-    protected function saveTagsAndCategory($model, $id)
+    private function saveTagsAndCategory($model, $id)
     {
         if (Yii::$app->request->isPost) {
             $model->deleteTags($id);
@@ -289,7 +289,7 @@ class ProfileController extends Controller
         }
     }
 
-    protected function createTags()
+    private function createTags()
     {
         $tagsValue = Yii::$app->request->post('tags');
         if ($tagsValue) {
@@ -307,13 +307,13 @@ class ProfileController extends Controller
         }
     }
 
-    protected function selectCategory($model)
+    private function selectCategory($model)
     {
         $catagory = Yii::$app->request->post('category');
         $model->saveCategoryID($catagory);
     }
 
-    protected function getCurrentTags($id)
+    private function getCurrentTags($id)
     {
         $getTagsId = ArticleTag::find()->where(['article_id' => $id])->all();
         $arrTagsId = [];

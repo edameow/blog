@@ -111,7 +111,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->save();
     }
 
-    protected function generateHashPassword($password)
+    private function generateHashPassword($password)
     {
         return Yii::$app->getSecurity()->generatePasswordHash($password);
     }
