@@ -15,7 +15,6 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
-use app\models\ContactForm;
 
 class SiteController extends Controller
 {
@@ -254,7 +253,7 @@ class SiteController extends Controller
         $text = "Регистрация прошла успешно, <br>
                  <b>$user->name</b>";
         Yii::$app->mailer->compose()
-            ->setFrom('galogen41001@mail.ru')
+            ->setFrom('')
             ->setTo($user->email)
             ->setSubject('Регистрация на сайте прошла успешно')
             ->setHtmlBody($text)
