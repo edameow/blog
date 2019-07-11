@@ -4,6 +4,8 @@ use yii\widgets\LinkPager;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
+
 ?>
 <?php
 $get = Yii::$app->request->get('tags');
@@ -23,6 +25,7 @@ $get = Yii::$app->request->get('tags');
         </div>
             <div class="row">
                 <div class="col-md-8">
+                    <?php Pjax::begin()?>
                     <?php if ($models) { ?>
                         <?php foreach ($models as $model) {?>
                             <article class="post post-list">
@@ -79,8 +82,8 @@ $get = Yii::$app->request->get('tags');
                             'pagination' => $pages,
                         ]);
                         ?>
-
                     <?php } else echo "<b>По запросу \"{$get}\" ничего не найдено</b>" ?>
+                    <?php Pjax::end()?>
                 </div>
                 <?= Sidebar::widget()?>
             </div>

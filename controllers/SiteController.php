@@ -122,8 +122,6 @@ class SiteController extends Controller
     public function actionPost($id)
     {
         if (Article::find()->where(['id' => $id, 'status' => 1])->one()) {
-            $this->ajaxAction();
-
             $model = Article::findOne($id);
             $tags = ArticleTag::find()->where(['article_id' => $id])->all();
 
@@ -147,26 +145,6 @@ class SiteController extends Controller
             ]);
         } else {
             return $this->render('error');
-        }
-    }
-
-    private function ajaxAction()
-    {
-        if (Yii::$app->request->isAjax && Yii::$app->request->get('action')) {
-            $action = Yii::$app->request->get('action');
-            $this->ajaxDeleteCommentAction($action);
-        }
-    }
-
-    private function ajaxDeleteCommentAction($action)
-    {
-        if ($action == 'deleteComment') {
-            if (!Yii::$app->user->isGuest && Yii::$app->user->identity->moderator) {
-                    $id = Yii::$app->request->get('comment-id');
-                    $model = $this->findComment($id);
-                    $model->deleteComment();
-                    die(' ');
-            } else return $this->render('error');
         }
     }
 
@@ -200,6 +178,19 @@ class SiteController extends Controller
             }
             return $tip;
         }
+    }
+
+    public function actionDeleteComment($id)
+    {
+        $this->ajaxDeleteCommentAction($id);
+    }
+
+    private function ajaxDeleteCommentAction($id)
+    {
+        if (!Yii::$app->user->isGuest && Yii::$app->user->identity->moderator) {
+            $this->findComment($id)->delete();
+            die(' ');
+        } else return $this->render('error');
     }
 
     public function actionCategory($id)

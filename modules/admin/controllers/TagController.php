@@ -3,7 +3,6 @@
 namespace app\modules\admin\controllers;
 
 use app\models\Tag;
-use app\models\TagSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -36,8 +35,7 @@ class TagController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        die(' ');
     }
 
     /**
@@ -47,7 +45,7 @@ class TagController extends Controller
      * @return Tag the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    private function findModel($id)
     {
         if (($model = Tag::findOne($id)) !== null) {
             return $model;

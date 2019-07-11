@@ -65,9 +65,4 @@ class Comment extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
-
-    public function deleteComment()
-    {
-        return $this->delete();
-    }
 }

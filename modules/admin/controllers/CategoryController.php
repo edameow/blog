@@ -89,7 +89,7 @@ class CategoryController extends Controller
      * @return Category the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    private function findModel($id)
     {
         if (($model = Category::findOne($id)) !== null) {
             return $model;

@@ -75,7 +75,7 @@ class ArticleController extends Controller
      * @return Article the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    private function findModel($id)
     {
         if (($model = Article::findOne($id)) !== null) {
             return $model;
@@ -84,7 +84,7 @@ class ArticleController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findOfferedModel()
+    private function findOfferedModel()
     {
         if (($model = Article::find()->where(['status' => 0])->all()) !== null) {
             return $model;

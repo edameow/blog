@@ -99,36 +99,29 @@ class ProfileController extends Controller
     public function actionDraft()
     {
         if (!Yii::$app->user->isGuest && Yii::$app->user->identity->contentmaker) {
-            $this->ajaxAction();
             $user_id = Yii::$app->user->id;
             $model = $this->findDraft($user_id);
             return $this->render('draft', compact('model'));
         } else return $this->render('error');
     }
 
-    private function ajaxAction()
+    public function actionOfferArticle($id)
     {
-        if (Yii::$app->request->isAjax) {
-            $id = Yii::$app->request->get('id');
-            $action = Yii::$app->request->get('action');
-            $this->ajaxOfferAction($id, $action);
-            $this->ajaxDeleteAction($id, $action);
+        if (!Yii::$app->user->isGuest && Yii::$app->user->identity->contentmaker) {
+            $model = $this->findArticle($id);
+            $model->saveArticle();
             die(' ');
-        }
+        } else return $this->render('error');
     }
 
-    private function ajaxOfferAction($id, $action)
+    public function actionDeleteArticle($id)
     {
-        if ($action == 'offer') {
-            $this->offerArticle($id);
-        }
-    }
-
-    private function ajaxDeleteAction($id, $action)
-    {
-        if ($action == 'delete') {
-            $this->deleteArticle($id);
-        }
+        if (!Yii::$app->user->isGuest && Yii::$app->user->identity->contentmaker) {
+            $tags = $this->getTagsId($id);
+            $this->findArticle($id)->delete();
+            $this->checkUselessTags($tags);
+            die(' ');
+        } else return $this->render('error');
     }
 
     public function actionArticle($id)
@@ -153,38 +146,6 @@ class ProfileController extends Controller
                 'tags' => $tags,
                 'imageModel' => $imageModel,
             ]);
-        } else return $this->render('error');
-    }
-
-//    public function actionArticleImage($id)
-//    {
-//        $model = new ImageUpload;
-//
-//        if (Yii::$app->request->isPost) {
-//            $article = $this->findArticle($id);
-//            $this->setImage($model, $article, 'articles');
-//            return $this->redirect(['article', 'id' => $id]);
-//        }
-//
-//        return $this->render('image', compact('model'));
-//    }
-
-    private function offerArticle($id)
-    {
-        if (!Yii::$app->user->isGuest && Yii::$app->user->identity->contentmaker) {
-            $model = $this->findArticle($id);
-            $model->saveArticle();
-        } else return $this->render('error');
-    }
-
-    private function deleteArticle($id)
-    {
-        if (!Yii::$app->user->isGuest && Yii::$app->user->identity->contentmaker) {
-            $tags = $this->getTagsId($id);
-            $this->findArticle($id)->delete();
-            $this->checkUselessTags($tags);
-
-            return $this->redirect(['draft']);
         } else return $this->render('error');
     }
 

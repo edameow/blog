@@ -17,6 +17,9 @@
                 <li>
                     <b>Почта:</b> <?= $user->email ?>
                 </li>
+                <li>
+                    <b>ID:</b> <?= $user->id ?>
+                </li>
             </ul>
         </div>
     </div>

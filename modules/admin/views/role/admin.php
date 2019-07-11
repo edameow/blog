@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -18,6 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <ul class="list-unstyled">
         <?php foreach ($user as $item) {?>
+            <?php Pjax::begin(['enablePushState' => false]);?>
             <li class="admin-list">
                 <ul class="list-unstyled">
                     <li><b>ID <?= $item->id?></b></li>
@@ -25,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </ul>
                 <?= Html::a('Удалить', ['delete', 'id' => $item->id, 'role' => 'admin'], ['class' => 'btn btn-danger'])?>
             </li>
+            <?php Pjax::end();?>
         <?php }?>
     </ul>
 

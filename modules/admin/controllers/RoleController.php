@@ -2,7 +2,6 @@
 
 namespace app\modules\admin\controllers;
 
-use app\models\Moderator;
 use app\models\RoleForm;
 use Yii;
 use app\models\User;
@@ -68,23 +67,22 @@ class RoleController extends Controller
     {
         $model = new RoleForm();
         $model->removeRole($id, $role);
-
-        return $this->goBack($role);
+        die(' ');
     }
 
-    protected function getUser($role)
+    private function getUser($role)
     {
         $user = User::find()->where([$role => 1])->all();
         return $user;
     }
 
-    protected function setRole($model, $role)
+    private function setRole($model, $role)
     {
         $id = $this->getId();
         $model->setRole($id, $role);
     }
 
-    protected function getId()
+    private function getId()
     {
         $id = Yii::$app->request->post('RoleForm');
         $id = $id['id'];

@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use app\components\Sidebar;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
 
 ?>
 
@@ -23,15 +24,15 @@ use yii\widgets\ActiveForm;
 
         <div class="row">
             <div class="col-md-8">
-
+                <?php Pjax::begin()?>
                 <?php foreach ($models as $model) {?>
                     <article class="post post-list">
                         <div class="row">
                             <?php if ($model['image']) { ?>
                                 <div class="col-sm-6">
                                     <div class="post-thumb">
-                                        <?= Html::a(Html::img("/web/images/articles/{$model['image']}"), Url::to(['site/post', 'id' => $model['id']]), ['class' => 'pull-left'])?>
-                                        <?= Html::a("<div class=\"text-uppercase text-center\">Прочитать</div>", Url::to(['site/post', 'id' => $model['id']]), ['class' => 'post-thumb-overlay text-center'])?>
+                                        <?= Html::a(Html::img("/web/images/articles/{$model['image']}"), Url::to(['site/post', 'id' => $model['id']]), ['class' => 'pull-left', 'data-pjax' => '0'])?>
+                                        <?= Html::a("<div class=\"text-uppercase text-center\">Прочитать</div>", Url::to(['site/post', 'id' => $model['id']]), ['class' => 'post-thumb-overlay text-center', 'data-pjax' => '0'])?>
                                     </div>
                                 </div>
                             <?php } ?>
@@ -43,10 +44,10 @@ use yii\widgets\ActiveForm;
                                 <div class="post-content">
                                     <header class="entry-header text-uppercase">
                                         <h6>
-                                            <?= Html::a($model->category->title, Url::to(['site/category', 'id' => $model['category_id']]))?>
+                                            <?= Html::a($model->category->title, Url::to(['site/category', 'id' => $model['category_id']]), ['data-pjax' => '0'])?>
                                         </h6>
                                         <h1 class="entry-title">
-                                            <?= Html::a($model['title'], Url::to(['site/post', 'id' => $model['id']]))?>
+                                            <?= Html::a($model['title'], Url::to(['site/post', 'id' => $model['id']]), ['data-pjax' => '0'])?>
                                         </h1>
                                     </header>
                                     <div class="entry-content">
@@ -64,7 +65,7 @@ use yii\widgets\ActiveForm;
                                         </p>
                                     </div>
                                     <div class="btn-continue-reading text-center text-uppercase">
-                                        <?= Html::a('Продолжение', Url::to(['site/post', 'id' => $model['id']]))?>
+                                        <?= Html::a('Продолжение', Url::to(['site/post', 'id' => $model['id']]), ['data-pjax' => '0'])?>
                                     </div>
                                     <div class="social-share">
                                         <span class="social-share-title pull-left text-capitalize"><?= $model->user['name'] . ' ' . $model->date?></span>
@@ -80,7 +81,7 @@ use yii\widgets\ActiveForm;
                     'pagination' => $pages,
                 ]);
                 ?>
-
+                <?php Pjax::end()?>
             </div>
             <?= Sidebar::widget()?>
         </div>

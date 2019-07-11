@@ -110,7 +110,7 @@ use yii\widgets\Pjax;
                             <?php if (!Yii::$app->user->isGuest) {
                                 if (Yii::$app->user->identity->moderator) {?>
                                     <div class="delete-comment">
-                                        <?= Html::a('Удалить комментарий', ['post', 'action' => 'deleteComment', 'comment-id' => $comment->id], ['class' => 'btn btn-primary']) ?>
+                                        <?= Html::a('Удалить комментарий', ['delete-comment', 'id' => $comment->id], ['class' => 'btn btn-primary']) ?>
                                     </div>
                                 <?php }
                             } ?>
