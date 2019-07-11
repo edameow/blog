@@ -113,8 +113,7 @@ class ProfileController extends Controller
             $action = Yii::$app->request->get('action');
             $this->ajaxOfferAction($id, $action);
             $this->ajaxDeleteAction($id, $action);
-            echo ' ';
-            die();
+            die(' ');
         }
     }
 

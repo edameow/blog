@@ -119,20 +119,28 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
-    public function actionPost($id, $sort = 0)
+    public function actionPost($id)
     {
         if (Article::find()->where(['id' => $id, 'status' => 1])->one()) {
+            $this->ajaxAction();
+
             $model = Article::findOne($id);
             $tags = ArticleTag::find()->where(['article_id' => $id])->all();
+
             $commentQuery = Comment::find()->where(['article_id' => $id]);
-            $this->sorting($sort, $commentQuery);
+            $this->sorting($commentQuery);
             $data = $this->getAll($commentQuery);
+
             $commentForm = new CommentForm();
-            $commentTip = $this->getCommentTip($data['model']);
+
+            $countComments = $commentQuery->count();
+            $commentTip = $this->getCommentTip($countComments);
+
             return $this->render('post', [
                 'model' => $model,
                 'tags'  => $tags,
                 'comments'  => $data['model'],
+                'countComments'  => $countComments,
                 'commentForm'  => $commentForm,
                 'commentTip'  => $commentTip,
                 'pages' => $data['pagination'],
@@ -142,9 +150,28 @@ class SiteController extends Controller
         }
     }
 
-    private function getCommentTip($comments)
+    private function ajaxAction()
     {
-        $count = count($comments);
+        if (Yii::$app->request->isAjax && Yii::$app->request->get('action')) {
+            $action = Yii::$app->request->get('action');
+            $this->ajaxDeleteCommentAction($action);
+        }
+    }
+
+    private function ajaxDeleteCommentAction($action)
+    {
+        if ($action == 'deleteComment') {
+            if (!Yii::$app->user->isGuest && Yii::$app->user->identity->moderator) {
+                    $id = Yii::$app->request->get('comment-id');
+                    $model = $this->findComment($id);
+                    $model->deleteComment();
+                    die(' ');
+            } else return $this->render('error');
+        }
+    }
+
+    private function getCommentTip($count)
+    {
         $strlen = strlen($count);
         $last = substr($count, -1);
         $penultimate = substr($count, -2, 1);
@@ -173,16 +200,6 @@ class SiteController extends Controller
             }
             return $tip;
         }
-    }
-
-    public function actionDeleteComment($id)
-    {
-        if (!Yii::$app->user->isGuest && Yii::$app->user->identity->moderator) {
-            $model = $this->findComment($id);
-            $article_id = $model->article_id;
-            $model->deleteComment();
-            return $this->redirect(['site/post', 'id' => $article_id]);
-        } else return $this->render('error');
     }
 
     public function actionCategory($id)
@@ -250,19 +267,20 @@ class SiteController extends Controller
 
     private function sendEmail($user)
     {
-        $text = "Регистрация прошла успешно, <br>
-                 <b>$user->name</b>";
-        Yii::$app->mailer->compose()
-            ->setFrom('')
-            ->setTo($user->email)
-            ->setSubject('Регистрация на сайте прошла успешно')
-            ->setHtmlBody($text)
-            ->send();
+//        $text = "Регистрация прошла успешно, <br>
+//                 <b>$user->name</b>";
+//        Yii::$app->mailer->compose()
+//            ->setFrom('')
+//            ->setTo($user->email)
+//            ->setSubject('Регистрация на сайте прошла успешно')
+//            ->setHtmlBody($text)
+//            ->send();
     }
 
 
-    private function sorting($sort, $query)
+    private function sorting($query)
     {
+        $sort = Yii::$app->request->get('sort');
         if ($sort) {
             if ($sort == 'old') {
                 $query->orderBy(['id' => SORT_ASC]);

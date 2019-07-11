@@ -88,8 +88,9 @@ use yii\widgets\Pjax;
                         <?= Html::a('Сначала старые', ['post', 'id' => $model->id, 'sort' => 'old'], ['class' => 'btn btn-success sort-old']) ?>
                     </div>
                     <div class="bottom-comment"><!--bottom comment-->
-                        <h4><?= count($comments)?> комментари<?= $commentTip?></h4>
+                        <h4><?= $countComments?> комментари<?= $commentTip?></h4>
                         <?php foreach ($comments as $comment) { ?>
+                            <?php Pjax::begin(['enablePushState' => false]);?>
                             <div class="comment-img">
                                 <?php  if ($model->user['image'] != null) {?>
                                     <img class="img-circle comment-avatar" src="/web/images/avatar/<?= $comment->user['image'] ?>" alt="">
@@ -109,15 +110,16 @@ use yii\widgets\Pjax;
                             <?php if (!Yii::$app->user->isGuest) {
                                 if (Yii::$app->user->identity->moderator) {?>
                                     <div class="delete-comment">
-                                        <?= Html::a('Удалить комментарий', ['delete-comment', 'id' => $comment->id], ['class' => 'btn btn-primary']) ?>
+                                        <?= Html::a('Удалить комментарий', ['post', 'action' => 'deleteComment', 'comment-id' => $comment->id], ['class' => 'btn btn-primary']) ?>
                                     </div>
                                 <?php }
                             } ?>
+                            <?php Pjax::end()?>
                         <?php } ?>
                     </div>
 
                 <?php }?>
-                <?php Pjax::end();?>
+                <?php Pjax::end()?>
 
             </div>
             <?= Sidebar::widget()?>
