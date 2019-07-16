@@ -1,5 +1,5 @@
 <?php
-use app\components\Sidebar;
+use app\widgets\sidebar\Sidebar;
 use yii\widgets\LinkPager;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -33,8 +33,8 @@ $get = Yii::$app->request->get('tags');
                                     <?php if ($model['image']) { ?>
                                         <div class="col-sm-6">
                                             <div class="post-thumb">
-                                                <?= Html::a(Html::img("/web/images/articles/{$model['image']}"), Url::to(['site/post', 'id' => $model['id']]), ['class' => 'pull-left'])?>
-                                                <?= Html::a("<div class=\"text-uppercase text-center\">Прочитать</div>", Url::to(['site/post', 'id' => $model['id']]), ['class' => 'post-thumb-overlay text-center'])?>
+                                                <?= Html::a(Html::img("/web/images/articles/{$model['image']}"), Url::to(['site/post', 'id' => $model['id']]), ['class' => 'pull-left', 'data-pjax' => '0'])?>
+                                                <?= Html::a("<div class=\"text-uppercase text-center\">Прочитать</div>", Url::to(['site/post', 'id' => $model['id']]), ['class' => 'post-thumb-overlay text-center', 'data-pjax' => '0'])?>
                                             </div>
                                         </div>
                                     <?php } ?>
@@ -46,10 +46,10 @@ $get = Yii::$app->request->get('tags');
                                             <div class="post-content">
                                                 <header class="entry-header text-uppercase">
                                                     <h6>
-                                                        <?= Html::a($model->category->title, Url::to(['site/category', 'id' => $model['category_id']]))?>
+                                                        <?= Html::a($model->category->title, Url::to(['site/category', 'id' => $model['category_id']]), ['data-pjax' => '0'])?>
                                                     </h6>
                                                     <h1 class="entry-title">
-                                                        <?= Html::a($model['title'], Url::to(['site/post', 'id' => $model['id']]))?>
+                                                        <?= Html::a($model['title'], Url::to(['site/post', 'id' => $model['id']]), ['data-pjax' => '0'])?>
                                                     </h1>
                                                 </header>
                                                 <div class="entry-content">
@@ -67,7 +67,7 @@ $get = Yii::$app->request->get('tags');
                                                     </p>
                                                 </div>
                                                 <div class="btn-continue-reading text-center text-uppercase">
-                                                    <?= Html::a('Продолжение', Url::to(['site/post', 'id' => $model['id']]))?>
+                                                    <?= Html::a('Продолжение', Url::to(['site/post', 'id' => $model['id']]), ['data-pjax' => '0'])?>
                                                 </div>
                                                 <div class="social-share">
                                                     <span class="social-share-title pull-left text-capitalize"><?= $model->user['name'] . ' ' . $model->date?></span>

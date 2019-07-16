@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
-use app\components\Sidebar;
+use app\widgets\sidebar\Sidebar;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 
