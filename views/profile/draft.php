@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             </p>
                                         </div>
                                         <div class="btn-continue-reading text-uppercase" style="margin-bottom: 1em">
-                                            <?= Html::a('Редактировать', Url::to(['profile/article', 'id' => $item['id']]), ['class' => 'btn btn-success'])?>
+                                            <?= Html::a('Редактировать', Url::to(['profile/article', 'id' => $item['id']]), ['class' => 'btn btn-success', 'data-pjax' => '0'])?>
                                             <?= Html::a('Предложить', ['offer-article', 'id' => $item['id']], ['class' => 'btn btn-primary']) ?>
                                             <?= Html::a('Удалить', ['delete-article', 'id' => $item['id']], ['class' => 'btn btn-danger']) ?>
                                         </div>

@@ -44,6 +44,9 @@ class ProfileController extends Controller
                 $user_value = Yii::$app->request->post('UpdateProfileForm');
                 if ($model->saveChanges($user_value)) {
                     return $this->redirect(['view']);
+                } else {
+                    Yii::$app->session->setFlash('error-password', 'Введён неверный пароль');
+                    return $this->refresh();
                 }
             }
 
@@ -243,27 +246,9 @@ class ProfileController extends Controller
     {
         if (Yii::$app->request->isPost) {
             $model->deleteTags($id);
-            $tagID = $this->createTags();
+            $tagID = $model->createTags();
             $model->linkTags($tagID);
             $this->selectCategory($model);
-        }
-    }
-
-    private function createTags()
-    {
-        $tagsValue = Yii::$app->request->post('tags');
-        if ($tagsValue) {
-            $tagsArr = explode(" ", $tagsValue);
-            foreach ($tagsArr as $one) {
-                $arr = ArrayHelper::map(Tag::find()->all(), 'id', 'title');
-                if (!in_array($one, $arr, true)) {
-                    $tags = new Tag();
-                    $tags->saveTags($one);
-                }
-                $arr = ArrayHelper::map(Tag::find()->all(), 'id', 'title');
-                $tagID[] = array_search($one, $arr);
-            }
-            return $tagID;
         }
     }
 

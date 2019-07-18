@@ -2,6 +2,9 @@
 
 namespace app\models;
 
+use Yii;
+use yii\helpers\ArrayHelper;
+
 /**
  * This is the model class for table "tag".
  *
@@ -54,5 +57,4 @@ class Tag extends \yii\db\ActiveRecord
         $this->title = $tag;
         $this->save();
     }
-
 }

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "article".
@@ -152,6 +153,25 @@ class Article extends \yii\db\ActiveRecord
     {
         $this->status = 1;
         return $this->save();
+    }
+
+
+    public function createTags()
+    {
+        $tagsValue = Yii::$app->request->post('tags');
+        if ($tagsValue) {
+            $tagsArr = explode(" ", $tagsValue);
+            foreach ($tagsArr as $one) {
+                $arr = ArrayHelper::map(Tag::find()->all(), 'id', 'title');
+                if (!in_array($one, $arr, true)) {
+                    $tags = new Tag();
+                    $tags->saveTags($one);
+                }
+                $arr = ArrayHelper::map(Tag::find()->all(), 'id', 'title');
+                $tagID[] = array_search($one, $arr);
+            }
+            return $tagID;
+        }
     }
 
 }
