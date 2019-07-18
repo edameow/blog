@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = 'Update';
 $flash = Yii::$app->session->getFlash('error-password');
 ?>
 <div class="container">
-    <div>
+    <div class="flash-error">
         <?= $flash?>
     </div>
         <h1 class="h1-to-h3"><?= Html::encode($this->title) ?></h1>
