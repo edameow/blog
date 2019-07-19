@@ -182,11 +182,6 @@ class SiteController extends Controller
 
     public function actionDeleteComment($id)
     {
-        $this->ajaxDeleteCommentAction($id);
-    }
-
-    private function ajaxDeleteCommentAction($id)
-    {
         if (!Yii::$app->user->isGuest && Yii::$app->user->identity->moderator) {
             $this->findComment($id)->delete();
             die(' ');

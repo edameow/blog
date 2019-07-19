@@ -40,15 +40,7 @@ class ProfileController extends Controller
             $model = new UpdateProfileForm();
             $model_value = $model->getValue();
 
-            if (Yii::$app->request->isPost) {
-                $user_value = Yii::$app->request->post('UpdateProfileForm');
-                if ($model->saveChanges($user_value)) {
-                    return $this->redirect(['view']);
-                } else {
-                    Yii::$app->session->setFlash('error-password', 'Введён неверный пароль');
-                    return $this->refresh();
-                }
-            }
+            $this->updateProfile($model);
 
             return $this->render('update', [
                 'model' => $model,
@@ -57,6 +49,18 @@ class ProfileController extends Controller
         } else return $this->render('error');
     }
 
+    private function updateProfile($model)
+    {
+        if (Yii::$app->request->isPost) {
+            $user_value = Yii::$app->request->post('UpdateProfileForm');
+            if ($model->saveChanges($user_value)) {
+                return $this->redirect(['view']);
+            } else {
+                Yii::$app->session->setFlash('error-password', 'Введён неверный пароль');
+                return $this->refresh();
+            }
+        }
+    }
 
     public function actionSetImage()
     {
@@ -78,24 +82,24 @@ class ProfileController extends Controller
     public function actionCreate()
     {
         if (!Yii::$app->user->isGuest && Yii::$app->user->identity->contentmaker) {
-                $imageModel = new ImageUpload;
-                $model = new Article();
-                $categories = $this->createCategoryArr();
+            $imageModel = new ImageUpload;
+            $model = new Article();
+            $categories = $this->createCategoryArr();
 
-                if ($model->load(Yii::$app->request->post()) && $model->saveDraft()) {
+            if ($model->load(Yii::$app->request->post()) && $model->saveDraft()) {
 
-                    $this->setImage($imageModel, $model, 'articles');
+                $this->setImage($imageModel, $model, 'articles');
 
-                    $id = $model->id;
-                    $this->saveTagsAndCategory($model, $id);
-                    return $this->redirect(['view']);
-                }
+                $id = $model->id;
+                $this->saveTagsAndCategory($model, $id);
+                return $this->redirect(['view']);
+            }
 
-                return $this->render('create', [
-                    'model' => $model,
-                    'categories' => $categories,
-                    'imageModel' => $imageModel,
-                ]);
+            return $this->render('create', [
+                'model' => $model,
+                'categories' => $categories,
+                'imageModel' => $imageModel,
+            ]);
         } else return $this->render('error');
     }
 
@@ -112,7 +116,7 @@ class ProfileController extends Controller
     {
         if (!Yii::$app->user->isGuest && Yii::$app->user->identity->contentmaker) {
             $model = $this->findArticle($id);
-            $model->saveArticle();
+            $model->offerArticle();
             die(' ');
         } else return $this->render('error');
     }

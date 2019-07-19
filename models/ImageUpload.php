@@ -39,31 +39,31 @@ class ImageUpload extends Model
         }
     }
 
-    public function deleteCurrentImage($currentImage, $folder)
+    private function deleteCurrentImage($currentImage, $folder)
     {
         if ($this->fileExists($currentImage, $folder)) {
             unlink($this->getFolder($folder) . $currentImage);
         }
     }
 
-    public function fileExists($currentImage, $folder)
+    private function fileExists($currentImage, $folder)
     {
         return file_exists($this->getFolder($folder) . $currentImage) && is_file($this->getFolder($folder) . $currentImage);
     }
 
-    public function getFolder($folder)
+    private function getFolder($folder)
     {
         return "images/{$folder}/";
     }
 
-    public function saveImage($folder)
+    private function saveImage($folder)
     {
         $fileName = $this->generateFileName();
         $this->image->saveAs($this->getFolder($folder) . $fileName);
         return $fileName;
     }
 
-    public function generateFileName()
+    private function generateFileName()
     {
         return strtolower(md5(uniqid($this->image->baseName))) . '.'  . $this->image->extension;
     }

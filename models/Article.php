@@ -119,11 +119,6 @@ class Article extends \yii\db\ActiveRecord
         }
     }
 
-    public function getDate()
-    {
-        return Yii::$app->formatter->asDate($this->date);
-    }
-
     public function saveDraft()
     {
         $this->user_id = Yii::$app->user->id;
@@ -131,7 +126,7 @@ class Article extends \yii\db\ActiveRecord
         return $this->save();
     }
 
-    public function saveArticle()
+    public function offerArticle()
     {
         $this->user_id = Yii::$app->user->id;
         $this->status = 0;
