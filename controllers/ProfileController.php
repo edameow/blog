@@ -27,7 +27,9 @@ use yii\web\UploadedFile;
 class ProfileController extends Controller
 {
     public $layout = 'profile';
-
+//
+//    Специально сделано всё в одном контроллере
+//
 //    public function actionFakerArticle()
 //    {
 //        $faker = Factory::create();
