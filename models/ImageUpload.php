@@ -39,7 +39,7 @@ class ImageUpload extends Model
         }
     }
 
-    private function deleteCurrentImage($currentImage, $folder)
+    public function deleteCurrentImage($currentImage, $folder)
     {
         if ($this->fileExists($currentImage, $folder)) {
             unlink($this->getFolder($folder) . $currentImage);
