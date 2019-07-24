@@ -323,6 +323,7 @@ class SiteController extends Controller
     private function tagSearch($tags)
     {
         if ($tags) {
+            $tags = strtolower($tags);
             $array = $this->getTagArray($tags);
             $tagIdArr = $this->getTagId($array);
             if ($tagIdArr) {

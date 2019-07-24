@@ -8,7 +8,7 @@ use yii\widgets\Pjax;
 
 ?>
 <?php
-$get = Yii::$app->request->get('tags');
+$get = strtolower(Yii::$app->request->get('tags'));
 ?>
 <!--main content start-->
 <div class="main-content">
