@@ -17,7 +17,7 @@ class m190414_023114_create_comment_table extends Migration
             'text'       => $this->string(),
             'user_id'    => $this->integer(),
             'article_id' => $this->integer(),
-            'date'       => $this->date(),
+            'date'       => $this->dateTime(),
         ]);
         // creates index for column `user_id`
         $this->createIndex(

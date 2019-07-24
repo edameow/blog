@@ -18,7 +18,7 @@ class Sidebar extends Widget
     public function run()
     {
         $popular = $this->getPopular();
-        $latest = Article::find()->where(['status' => 1])->orderBy('date asc')->limit(4)->all();
+        $latest = Article::find()->where(['status' => 1])->orderBy('date desc')->limit(4)->all();
         $category = Category::find()->all();
 
         return $this->render('sidebar', compact('popular', 'latest', 'category'));

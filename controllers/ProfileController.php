@@ -12,12 +12,10 @@ namespace app\controllers;
 use app\models\Article;
 use app\models\ArticleTag;
 use app\models\Category;
-use app\models\Comment;
 use app\models\ImageUpload;
 use app\models\Tag;
 use app\models\UpdateProfileForm;
 use app\models\User;
-use Faker\Factory;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -27,82 +25,6 @@ use yii\web\UploadedFile;
 class ProfileController extends Controller
 {
     public $layout = 'profile';
-//
-//    Специально сделано всё в одном контроллере
-//
-//    public function actionFakerArticle()
-//    {
-//        $faker = Factory::create();
-//
-//        for ($i = 0; $i < 15; $i++) {
-//            $testTag = $faker->word;
-//            $modelTag = new Tag();
-//            $modelTag->title = $testTag;
-//            $modelTag->save();
-//        }
-//
-//        for ($i = 0; $i < 5; $i++) {
-//            $testCategory = $faker->word;
-//            $modelCategory = new Category();
-//            $modelCategory->title = $testCategory;
-//            $modelCategory->save();
-//        }
-//
-//        $tag = Tag::find()->all();
-//        foreach ($tag as $item) {
-//            $arrTag[] = $item->id;
-//        }
-//
-//        $category = Category::find()->all();
-//        foreach ($category as $item) {
-//            $arrCat[] = $item->id;
-//        }
-//
-//        $user = User::find()->all();
-//        foreach ($user as $item) {
-//            $arrUser[] = $item->id;
-//        }
-//
-//        for ($i = 0; $i < 1000; $i++) {
-//            $tagID = $faker->randomElements($arrTag, $faker->randomElement([1, 2, 3, 4]));
-//            $article = new Article();
-//            $article->title = $faker->realText(30);
-//            $article->content = $faker->realText(1000);
-//            $article->user_id = $arrUser;
-//            $article->status = $faker->boolean(5) ? 2 : 1;
-//            $article->category_id = $faker->randomElement($arrCat);
-//            $article->save();
-//
-//            $article->linkTags($tagID);
-//        }
-//    }
-//
-//    public function actionFakerComment()
-//    {
-//        $faker = Factory::create();
-//
-//        $user = User::find()->all();
-//        foreach ($user as $item) {
-//            $arrUser[] = $item->id;
-//        }
-//
-//        $article = Article::find()->all();
-//        foreach ($article as $item) {
-//            $arrArt[] = $item->id;
-//        }
-//
-//        foreach ($arrArt as $item) {
-//            $countComments = range(0, 50);
-//
-//            for ($i = 0; $i <= $faker->randomElement($countComments); $i++) {
-//                $comment = new Comment();
-//                $comment->text = $faker->realText(100);
-//                $comment->user_id = $faker->randomElement($arrUser);
-//                $comment->article_id = $item;
-//                $comment->save();
-//            }
-//        }
-//    }
 
     public function actionView()
     {
@@ -303,7 +225,7 @@ class ProfileController extends Controller
 
     private function findDraft($user_id)
     {
-        if (($model = Article::find()->where(['status' => 2, 'user_id' => $user_id])->all()) !== null) {
+        if (($model = Article::find()->where(['status' => 2, 'user_id' => $user_id])->orderBy('id asc')->all()) !== null) {
             return $model;
         }
 

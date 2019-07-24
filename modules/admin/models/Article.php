@@ -41,8 +41,7 @@ class Article extends \yii\db\ActiveRecord
             [['title'], 'required'],
             [['title'], 'string', 'max' => 255],
             [['title', 'content'], 'string'],
-            [['date'], 'date', 'format' => 'php:Y-m-d'],
-            [['date'], 'default', 'value' => date('Y-m-d')],
+            [['date'], 'date', 'format' => 'php:Y-m-d H:i:s'],
         ];
     }
 
@@ -69,6 +68,11 @@ class Article extends \yii\db\ActiveRecord
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
+    public function getImage()
+    {
+        return ($this->image) ? '/images/articles/' . $this->image : '';
+    }
+
     public function getTags()
     {
         return $this->hasMany(Tag::className(), ['id' => 'tag_id'])
@@ -84,7 +88,7 @@ class Article extends \yii\db\ActiveRecord
     public function publishArticle()
     {
         $this->status = 1;
-        $this->date = date('Y-m-d');
+        $this->date = date('Y-m-d H:i:s');
         return $this->save();
     }
 }

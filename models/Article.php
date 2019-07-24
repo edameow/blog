@@ -41,8 +41,7 @@ class Article extends \yii\db\ActiveRecord
             [['title'], 'required'],
             [['title'], 'string', 'max' => 255],
             [['title', 'content'], 'string'],
-            [['date'], 'date', 'format' => 'php:Y-m-d'],
-            [['date'], 'default', 'value' => date('Y-m-d')],
+            [['date'], 'date', 'format' => 'php:Y-m-d H:i:s'],
         ];
     }
 
