@@ -300,7 +300,7 @@ class SiteController extends Controller
             $query = $this->categorySearch($category_id);
         }
         if ($query) {
-            return $query->orderBy(['id' => SORT_DESC]);
+            return $query->orderBy(['date' => SORT_ASC]);
         }
     }
 

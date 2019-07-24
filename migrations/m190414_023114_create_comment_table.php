@@ -13,11 +13,11 @@ class m190414_023114_create_comment_table extends Migration
     public function up()
     {
         $this->createTable('comment', [
-            'id' => $this->primaryKey(),
-            'text'=>$this->string(),
-            'user_id'=>$this->integer(),
-            'article_id'=>$this->integer(),
-            'date'=>$this->date(),
+            'id'         => $this->primaryKey(),
+            'text'       => $this->string(),
+            'user_id'    => $this->integer(),
+            'article_id' => $this->integer(),
+            'date'       => $this->date(),
         ]);
         // creates index for column `user_id`
         $this->createIndex(

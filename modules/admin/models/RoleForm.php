@@ -6,7 +6,7 @@
  * Time: 5:28
  */
 
-namespace app\models;
+namespace app\modules\admin\models;
 
 
 use yii\base\Model;

@@ -2,9 +2,9 @@
 
 namespace app\modules\admin\controllers;
 
-use app\models\RoleForm;
+use app\modules\admin\models\RoleForm;
 use Yii;
-use app\models\User;
+use app\modules\admin\models\User;
 use yii\web\Controller;
 
 /**

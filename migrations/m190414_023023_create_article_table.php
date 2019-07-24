@@ -13,14 +13,14 @@ class m190414_023023_create_article_table extends Migration
     public function up()
     {
         $this->createTable('{{%article}}', [
-            'id' => $this->primaryKey(),
-            'title'=>$this->string(),
-            'content'=>$this->text(),
-            'date'=>$this->date(),
-            'image'=>$this->string('36'),
-            'user_id'=>$this->integer(),
-            'status'=>$this->integer('1'),
-            'category_id'=>$this->integer('1'),
+            'id'          => $this->primaryKey(),
+            'title'       => $this->string(),
+            'content'     => $this->text(),
+            'date'        => $this->date(),
+            'image'       => $this->string('36'),
+            'user_id'     => $this->integer(),
+            'status'      => $this->integer('1'),
+            'category_id' => $this->integer('1'),
         ]);
         $this->createIndex(
             'date',

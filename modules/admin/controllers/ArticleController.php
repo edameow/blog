@@ -2,8 +2,8 @@
 
 namespace app\modules\admin\controllers;
 
-use app\models\ArticleTag;
-use app\models\Article;
+use app\modules\admin\models\ArticleTag;
+use app\modules\admin\models\Article;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

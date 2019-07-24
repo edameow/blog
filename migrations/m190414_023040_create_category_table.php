@@ -13,8 +13,8 @@ class m190414_023040_create_category_table extends Migration
     public function up()
     {
         $this->createTable('{{%category}}', [
-            'id' => $this->primaryKey('1'),
-            'title'=>$this->string('50')
+            'id'    => $this->primaryKey('1'),
+            'title' => $this->string('50')
         ]);
     }
 

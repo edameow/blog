@@ -3,8 +3,7 @@
 namespace app\modules\admin\controllers;
 
 use Yii;
-use app\models\Category;
-use app\models\CategorySearch;
+use app\modules\admin\models\Category;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 

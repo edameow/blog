@@ -2,7 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
-use app\models\Tag;
+use app\modules\admin\models\Tag;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 

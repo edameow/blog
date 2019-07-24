@@ -133,21 +133,9 @@ class Article extends \yii\db\ActiveRecord
         return $this->save();
     }
 
-    public function rejectArticle()
-    {
-        $this->status = 2;
-        return $this->save();
-    }
-
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
-    }
-
-    public function publishArticle()
-    {
-        $this->status = 1;
-        return $this->save();
     }
 
 
