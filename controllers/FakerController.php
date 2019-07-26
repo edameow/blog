@@ -16,6 +16,7 @@ class FakerController extends Controller
 {
 //
 //    Специально сделано всё в одном контроллере
+//    Заполняет бд случайными статьями, категориями, тегами и комментариями
 //
     public function actionIndex()
     {
