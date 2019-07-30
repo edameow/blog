@@ -20,8 +20,6 @@ class PublicAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        "web/css/font-awesome.min.css",
-        "web/css/animate.min.css",
         "web/css/style.css",
         "web/css/responsive.css",
     ];
