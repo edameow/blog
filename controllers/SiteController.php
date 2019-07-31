@@ -8,6 +8,9 @@ use app\models\Comment;
 use app\models\CommentForm;
 use app\models\SignupForm;
 use app\models\Tag;
+use app\models\TagBlackList;
+use app\models\User;
+use app\models\UserBlackList;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
@@ -180,6 +183,22 @@ class SiteController extends Controller
         }
     }
 
+    public function actionBlockTag($id)
+    {
+        $user_id = Yii::$app->user->id;
+        $model = new TagBlackList();
+        $model->banTag($id, $user_id);
+        return $this->goHome();
+    }
+
+    public function actionBlockUser($id)
+    {
+        $user_id = Yii::$app->user->id;
+        $model = new UserBlackList();
+        $model->banUser($id, $user_id);
+        return $this->goHome();
+    }
+
     public function actionDeleteComment($id)
     {
         if (!Yii::$app->user->isGuest && Yii::$app->user->identity->moderator) {
@@ -203,13 +222,13 @@ class SiteController extends Controller
         $query = $this->getQuery(0, 0, $tags);
         $data = $this->getAll($query);
         if ($data) {
-            return $this->render('category',  [
+            return $this->render('category', [
                 'pages' => $data['pagination'],
                 'models' => $data['model'],
             ]);
         }
         $models = null;
-        return $this->render('category',  [
+        return $this->render('category', [
             'models' => $models,
         ]);
     }

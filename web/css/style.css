@@ -463,7 +463,14 @@ blog css
     background-color: #60c7eb;
     border: 1px solid #60c7eb;
     font-size: 14px;
-    margin: 0px 6px 10px 0;
+    margin: 0px 0px 10px 0;
+}
+
+.ban {
+    background-color: #d9534f;
+    border: 1px solid #d9534f;
+    font-size: 14px;
+    margin: 0px 0px 10px 0;
 }
 
 .bottom-comment {
