@@ -47,9 +47,15 @@ use yii\widgets\Pjax;
                             <?php }?>
                         </div>
                         <div class="social-share">
-							<span class="social-share-title pull-left text-capitalize">
+							<span class="social-share-title">
                                 <?= $model->user['name'] ?> <?= $model->date ?>
                             </span>
+                            <?php if (!Yii::$app->user->isGuest) { ?>
+                            <br>
+                            <span>
+                                <?= Html::a("Не показывать посты от {$model->user['name']}", Url::to(['site/block_user', 'id' => $model->user['id']]))?>
+                            </span>
+                            <?php }?>
                         </div>
                     </div>
                 </article>
