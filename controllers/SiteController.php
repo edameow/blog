@@ -311,6 +311,7 @@ class SiteController extends Controller
 
     private function getQuery($index = 1, $category_id = 0, $tags = 0)
     {
+        $blocked_id = $this->getBlockedId();
         $query = $this->indexSearch($index);
         if (!$query) {
             $query = $this->tagSearch($tags);
@@ -318,8 +319,62 @@ class SiteController extends Controller
         if (!$query) {
             $query = $this->categorySearch($category_id);
         }
+        $this->getOutBlockedArticle($query, $blocked_id);
         if ($query) {
             return $query->orderBy(['date' => SORT_DESC]);
+        }
+    }
+
+    private function getBlockedId()
+    {
+        if (!Yii::$app->user->isGuest) {
+            $user_id = Yii::$app->user->id;
+            $blockedUsersId = $this->getBlockedUsersId($user_id);
+            $blockedTagsId = $this->getBlockedTagsId($user_id);
+            $array_merge = array_merge($blockedUsersId, $blockedTagsId);
+            $result = array_unique($array_merge);
+            return $result;
+        }
+    }
+
+    private function getBlockedTagsId($user_id)
+    {
+        $blockedId = TagBlackList::find()->where(['user_id' => $user_id])->all();
+        if ($blockedId) {
+            foreach ($blockedId as $item) {
+                $id = $item->black_list_tag;
+                $articleTags = ArticleTag::find()->where(['tag_id' => $id])->all();
+                foreach ($articleTags as $value) {
+                    $blockedTagsId[] = $value->article_id;
+                }
+            }
+            $result = array_unique($blockedTagsId);
+            return $result;
+        }
+    }
+
+    private function getBlockedUsersId($user_id)
+    {
+        $blockedId = UserBlackList::find()->where(['user_id' => $user_id])->all();
+        if ($blockedId) {
+            foreach ($blockedId as $item) {
+                $id = $item->black_list_user;
+                $articleUser = Article::find()->where(['user_id' => $id])->all();
+                foreach ($articleUser as $value) {
+                    $blockedUsersId[] = $value->id;
+                }
+            }
+            $result = array_unique($blockedUsersId);
+            return $result;
+        }
+    }
+
+    private function getOutBlockedArticle($query, $blocked_id)
+    {
+        if ($blocked_id) {
+            foreach ($blocked_id as $item) {
+                $query->andWhere(['!=', 'id', $item]);
+            }
         }
     }
 
