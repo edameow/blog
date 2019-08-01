@@ -29,9 +29,9 @@ PublicAsset::register($this);
                     <div class="nav text-uppercase">
                         <a class="btn-style" href="<?= Url::home()?>">Главная</a>
                     </div>
-                    <div class="nav text-uppercase">
-                        <a class="btn-style" href="<?= Url::to(['faker/index'])?>">Фейкер постов</a>
-                    </div>
+                <div class="nav text-uppercase">
+                    <a class="btn-style" href="<?= Url::to(['faker/index'])?>">Фейкер постов</a>
+                </div>
                     <div class="i_con">
                         <div class="nav text-uppercase">
                             <?php if (Yii::$app->user->isGuest) {?>
