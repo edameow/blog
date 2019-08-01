@@ -331,9 +331,17 @@ class SiteController extends Controller
             $user_id = Yii::$app->user->id;
             $blockedUsersId = $this->getBlockedUsersId($user_id);
             $blockedTagsId = $this->getBlockedTagsId($user_id);
-            $array_merge = array_merge($blockedUsersId, $blockedTagsId);
-            $result = array_unique($array_merge);
-            return $result;
+            if ($blockedUsersId & $blockedTagsId) {
+                $array_merge = array_merge($blockedUsersId, $blockedTagsId);
+                $result = array_unique($array_merge);
+                return $result;
+            } elseif ($blockedUsersId) {
+                $result = $blockedUsersId;
+                return $result;
+            } elseif ($blockedTagsId) {
+                $result = $blockedTagsId;
+                return $result;
+            }
         }
     }
 
