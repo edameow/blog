@@ -44,12 +44,25 @@ use yii\widgets\Pjax;
                         <div>
                             <?php foreach ($tags as $tag) { ?>
                                 <?= Html::a($tag->tag->title, Url::to(['site/tag', 'tags' => $tag->tag->title]), ['class' => 'btn btn-default tag'])?>
+
+                                <?php if (!Yii::$app->user->isGuest) { ?>
+                                    <?= Html::a("🚫", Url::to(['site/block-tag', 'id' => $tag->tag['id']]), ['class' => 'btn btn-default ban'])?>
+                                <?php }?>
+
                             <?php }?>
                         </div>
                         <div class="social-share">
-							<span class="social-share-title pull-left text-capitalize">
+							<span class="social-share-title">
                                 <?= $model->user['name'] ?> <?= $model->date ?>
                             </span>
+
+                            <?php if (!Yii::$app->user->isGuest) { ?>
+                                <br>
+                                <span>
+                                    <?= Html::a("Не показывать посты от {$model->user['name']}", Url::to(['site/block-user', 'id' => $model->user['id']]))?>
+                                </span>
+                            <?php }?>
+
                         </div>
                     </div>
                 </article>

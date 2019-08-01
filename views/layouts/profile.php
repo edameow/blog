@@ -61,6 +61,9 @@ PublicAsset::register($this);
         <li>
             <a class="btn" href="<?= Url::to(['profile/set-image'])?>">Сменить аватарку</a>
         </li>
+        <li>
+            <a class="btn" href="<?= Url::to(['profile/black-list'])?>">Чёрный список</a>
+        </li>
         <?php if (!Yii::$app->user->isGuest && Yii::$app->user->identity->contentmaker) { ?>
             <li>
                 <a class="btn" href="<?= Url::to(['profile/create'])?>">Написать статью</a>

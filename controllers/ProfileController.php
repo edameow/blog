@@ -8,8 +8,10 @@ use app\models\ArticleTag;
 use app\models\Category;
 use app\models\ImageUpload;
 use app\models\Tag;
+use app\models\TagBlackList;
 use app\models\UpdateProfileForm;
 use app\models\User;
+use app\models\UserBlackList;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -96,6 +98,31 @@ class ProfileController extends Controller
             ]);
         } else return $this->render('error');
     }
+
+    public function actionBlackList()
+    {
+        if (!Yii::$app->user->isGuest) {
+            $id = Yii::$app->user->id;
+            $bl_tags = TagBlackList::find()->where(['user_id' => $id])->all();
+            $bl_users = UserBlackList::find()->where(['user_id' => $id])->all();
+            return $this->render('black-list', compact('bl_tags', 'bl_users'));
+        } else return $this->render('error');
+    }
+
+    public function actionUnbanTag($id)
+    {
+        $model = TagBlackList::findOne($id);
+        $model->delete();
+        die(' ');
+    }
+
+    public function actionUnbanUser($id)
+    {
+        $model = UserBlackList::findOne($id);
+        $model->delete();
+        die(' ');
+    }
+
 
     public function actionDraft()
     {

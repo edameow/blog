@@ -103,5 +103,4 @@ class Sidebar extends Widget
         }
         return $array;
     }
-
 }

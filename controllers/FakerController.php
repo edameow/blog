@@ -22,7 +22,7 @@ class FakerController extends Controller
         return $this->render('index');
     }
 
-    public function actionFakerArticle()
+    public function actionFakerTag()
     {
         $faker = Factory::create();
 
@@ -32,11 +32,25 @@ class FakerController extends Controller
             $modelTag->save();
         }
 
+        echo "Удачно";
+    }
+
+    public function actionFakerCategory()
+    {
+        $faker = Factory::create();
+
         for ($i = 0; $i < 5; $i++) {
             $modelCategory = new Category();
             $modelCategory->title = $faker->word;
             $modelCategory->save();
         }
+
+        echo "Удачно";
+    }
+
+    public function actionFakerArticle()
+    {
+        $faker = Factory::create();
 
         $tag = Tag::find()->all();
         foreach ($tag as $item) {
@@ -58,7 +72,7 @@ class FakerController extends Controller
             $article = new Article();
             $article->title = $faker->realText(30);
             $article->content = $faker->realText(1000);
-            $article->user_id = $arrUser;
+            $article->user_id = $faker->randomElement($arrUser);
             $article->status = $faker->boolean(5) ? 2 : 1;
             $article->category_id = $faker->randomElement($arrCat);
 

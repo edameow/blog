@@ -8,6 +8,9 @@ use app\models\Comment;
 use app\models\CommentForm;
 use app\models\SignupForm;
 use app\models\Tag;
+use app\models\TagBlackList;
+use app\models\User;
+use app\models\UserBlackList;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
@@ -180,6 +183,22 @@ class SiteController extends Controller
         }
     }
 
+    public function actionBlockTag($id)
+    {
+        $user_id = Yii::$app->user->id;
+        $model = new TagBlackList();
+        $model->banTag($id, $user_id);
+        return $this->goHome();
+    }
+
+    public function actionBlockUser($id)
+    {
+        $user_id = Yii::$app->user->id;
+        $model = new UserBlackList();
+        $model->banUser($id, $user_id);
+        return $this->goHome();
+    }
+
     public function actionDeleteComment($id)
     {
         if (!Yii::$app->user->isGuest && Yii::$app->user->identity->moderator) {
@@ -203,13 +222,13 @@ class SiteController extends Controller
         $query = $this->getQuery(0, 0, $tags);
         $data = $this->getAll($query);
         if ($data) {
-            return $this->render('category',  [
+            return $this->render('category', [
                 'pages' => $data['pagination'],
                 'models' => $data['model'],
             ]);
         }
         $models = null;
-        return $this->render('category',  [
+        return $this->render('category', [
             'models' => $models,
         ]);
     }
@@ -292,6 +311,7 @@ class SiteController extends Controller
 
     private function getQuery($index = 1, $category_id = 0, $tags = 0)
     {
+        $blocked_id = $this->getBlockedId();
         $query = $this->indexSearch($index);
         if (!$query) {
             $query = $this->tagSearch($tags);
@@ -299,8 +319,62 @@ class SiteController extends Controller
         if (!$query) {
             $query = $this->categorySearch($category_id);
         }
+        $this->getOutBlockedArticle($query, $blocked_id);
         if ($query) {
             return $query->orderBy(['date' => SORT_DESC]);
+        }
+    }
+
+    private function getBlockedId()
+    {
+        if (!Yii::$app->user->isGuest) {
+            $user_id = Yii::$app->user->id;
+            $blockedUsersId = $this->getBlockedUsersId($user_id);
+            $blockedTagsId = $this->getBlockedTagsId($user_id);
+            $array_merge = array_merge($blockedUsersId, $blockedTagsId);
+            $result = array_unique($array_merge);
+            return $result;
+        }
+    }
+
+    private function getBlockedTagsId($user_id)
+    {
+        $blockedId = TagBlackList::find()->where(['user_id' => $user_id])->all();
+        if ($blockedId) {
+            foreach ($blockedId as $item) {
+                $id = $item->black_list_tag;
+                $articleTags = ArticleTag::find()->where(['tag_id' => $id])->all();
+                foreach ($articleTags as $value) {
+                    $blockedTagsId[] = $value->article_id;
+                }
+            }
+            $result = array_unique($blockedTagsId);
+            return $result;
+        }
+    }
+
+    private function getBlockedUsersId($user_id)
+    {
+        $blockedId = UserBlackList::find()->where(['user_id' => $user_id])->all();
+        if ($blockedId) {
+            foreach ($blockedId as $item) {
+                $id = $item->black_list_user;
+                $articleUser = Article::find()->where(['user_id' => $id])->all();
+                foreach ($articleUser as $value) {
+                    $blockedUsersId[] = $value->id;
+                }
+            }
+            $result = array_unique($blockedUsersId);
+            return $result;
+        }
+    }
+
+    private function getOutBlockedArticle($query, $blocked_id)
+    {
+        if ($blocked_id) {
+            foreach ($blocked_id as $item) {
+                $query->andWhere(['!=', 'id', $item]);
+            }
         }
     }
 
