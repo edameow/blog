@@ -10,7 +10,6 @@ use  yii\helpers\Url;
                 <?php foreach ($category as $item) {?>
                     <li>
                         <a href="<?= Url::to(['site/category', 'id' => $item['id']])?>"><?= $item['title']?></a>
-                        <span class="post-count pull-right">(<?= $item->getArticle()->where(['status' => 1])->count()?>)</span>
                     </li>
                 <?php }?>
             </ul>

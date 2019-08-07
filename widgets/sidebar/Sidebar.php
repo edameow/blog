@@ -4,8 +4,12 @@ namespace app\widgets\sidebar;
 
 
 use app\models\Article;
+use app\models\ArticleTag;
 use app\models\Category;
 use app\models\Comment;
+use app\models\TagBlackList;
+use app\models\UserBlackList;
+use Yii;
 use yii\base\Widget;
 
 class Sidebar extends Widget
@@ -17,12 +21,103 @@ class Sidebar extends Widget
 
     public function run()
     {
+//        $popular = $this->getPopular();
+//        $latest = Article::find()->where(['status' => 1])->orderBy('date desc')->limit(4)->all();
         $popular = $this->getPopular();
-        $latest = Article::find()->where(['status' => 1])->orderBy('date desc')->limit(4)->all();
+        $latest = $this->getAll('latest');
         $category = Category::find()->all();
 
         return $this->render('sidebar', compact('popular', 'latest', 'category'));
     }
+
+    private function getAll($category)
+    {
+        $query = $this->getQuery($category);
+        return $query->all();
+    }
+
+    private function getQuery($category)
+    {
+        $blocked_id = $this->getBlockedId();
+        if ($category == 'popular') {
+//            $query = $this->popularArticles();
+        } elseif ($category == 'latest') {
+            $query = $this->latestArticles();
+        }
+        $this->getOutBlockedArticle($query, $blocked_id);
+        return $query;
+    }
+
+    private function getBlockedId()
+    {
+        if (!Yii::$app->user->isGuest) {
+            $user_id = Yii::$app->user->id;
+            $blockedUsersId = $this->getBlockedUsersId($user_id);
+            $blockedTagsId = $this->getBlockedTagsId($user_id);
+            if ($blockedUsersId & $blockedTagsId) {
+                $array_merge = array_merge($blockedUsersId, $blockedTagsId);
+                $result = array_unique($array_merge);
+                return $result;
+            } elseif ($blockedUsersId) {
+                $result = $blockedUsersId;
+                return $result;
+            } elseif ($blockedTagsId) {
+                $result = $blockedTagsId;
+                return $result;
+            }
+        }
+    }
+
+    private function getBlockedTagsId($user_id)
+    {
+        $blockedId = TagBlackList::find()->where(['user_id' => $user_id])->all();
+        if ($blockedId) {
+            foreach ($blockedId as $item) {
+                $id = $item->black_list_tag;
+                $articleTags = ArticleTag::find()->where(['tag_id' => $id])->all();
+                foreach ($articleTags as $value) {
+                    $blockedTagsId[] = $value->article_id;
+                }
+            }
+            $result = array_unique($blockedTagsId);
+            return $result;
+        }
+    }
+
+    private function getBlockedUsersId($user_id)
+    {
+        $blockedId = UserBlackList::find()->where(['user_id' => $user_id])->all();
+        if ($blockedId) {
+            foreach ($blockedId as $item) {
+                $id = $item->black_list_user;
+                $articleUser = Article::find()->where(['user_id' => $id])->all();
+                foreach ($articleUser as $value) {
+                    $blockedUsersId[] = $value->id;
+                }
+            }
+            $result = array_unique($blockedUsersId);
+            return $result;
+        }
+    }
+
+    private function getOutBlockedArticle($query, $blocked_id)
+    {
+        if ($blocked_id) {
+            foreach ($blocked_id as $item) {
+                $query->andWhere(['!=', 'id', $item]);
+            }
+        }
+    }
+
+    private function latestArticles()
+    {
+        $query = Article::find()->where(['status' => 1])->orderBy('date desc')->limit(4);
+        return $query;
+    }
+
+
+
+
 
     private function getPopular()
     {

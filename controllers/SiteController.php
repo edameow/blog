@@ -185,18 +185,22 @@ class SiteController extends Controller
 
     public function actionBlockTag($id)
     {
-        $user_id = Yii::$app->user->id;
-        $model = new TagBlackList();
-        $model->banTag($id, $user_id);
-        return $this->goHome();
+        if (!Yii::$app->user->isGuest) {
+            $user_id = Yii::$app->user->id;
+            $model = new TagBlackList();
+            $model->banTag($id, $user_id);
+            return $this->goHome();
+        } else return $this->render('error');
     }
 
     public function actionBlockUser($id)
     {
-        $user_id = Yii::$app->user->id;
-        $model = new UserBlackList();
-        $model->banUser($id, $user_id);
-        return $this->goHome();
+        if (!Yii::$app->user->isGuest) {
+            $user_id = Yii::$app->user->id;
+            $model = new UserBlackList();
+            $model->banUser($id, $user_id);
+            return $this->goHome();
+        } else return $this->render('error');
     }
 
     public function actionDeleteComment($id)

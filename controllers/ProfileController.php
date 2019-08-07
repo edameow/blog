@@ -111,16 +111,20 @@ class ProfileController extends Controller
 
     public function actionUnbanTag($id)
     {
-        $model = TagBlackList::findOne($id);
-        $model->delete();
-        die(' ');
+        if (!Yii::$app->user->isGuest) {
+            $model = TagBlackList::findOne($id);
+            $model->delete();
+            die(' ');
+        } else return $this->render('error');
     }
 
     public function actionUnbanUser($id)
     {
-        $model = UserBlackList::findOne($id);
-        $model->delete();
-        die(' ');
+        if (!Yii::$app->user->isGuest) {
+            $model = UserBlackList::findOne($id);
+            $model->delete();
+            die(' ');
+        } else return $this->render('error');
     }
 
 
