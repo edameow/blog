@@ -67,7 +67,7 @@ class FakerController extends Controller
             $arrUser[] = $item->id;
         }
 
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 200; $i++) {
             $tagID = $faker->randomElements($arrTag, $faker->randomElement([1, 2, 3, 4]));
             $article = new Article();
             $article->title = $faker->realText(30);

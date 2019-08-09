@@ -13,9 +13,9 @@ class m190731_125708_create_tag_black_list_table extends Migration
     public function safeUp()
     {
         $this->createTable('{{%tag_black_list}}', [
-            'id'             => $this->primaryKey(),
             'user_id'        => $this->integer(),
             'black_list_tag' => $this->integer(),
+            'PRIMARY KEY(user_id, black_list_tag)',
         ]);
 
         $this->createIndex(

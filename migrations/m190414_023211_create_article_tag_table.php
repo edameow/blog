@@ -13,10 +13,11 @@ class m190414_023211_create_article_tag_table extends Migration
     public function up()
     {
         $this->createTable('article_tag', [
-            'id'         => $this->primaryKey(),
-            'article_id' => $this->integer(),
-            'tag_id'     => $this->integer(),
+            'article_id' => $this->integer()->notNull(),
+            'tag_id'     => $this->integer()->notNull(),
+            'PRIMARY KEY(article_id, tag_id)',
         ]);
+        $this->primaryKey('');
         // creates index for column `article_id`
         $this->createIndex(
             'tag_article_article_id',
